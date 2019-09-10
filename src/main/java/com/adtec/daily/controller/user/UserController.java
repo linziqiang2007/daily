@@ -326,10 +326,12 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/user/getPublicKey")
     public Msg getPublicKey() throws Exception {
-        File resPath = new File(this.getClass().getResource("/").getPath());
+        //解决字符编码问题  java.io.FileNotFoundException: D:\Program%20Files\apache-tomcat-8.5.35\webapps\ROOT\WEB-INF\classes\conf\publicKey.txt (系统找不到指定的路径。)
+        File resPath = new File(this.getClass().getResource("/").toURI().getPath());
         logger.info("resPath:" + resPath);
         publicKeyPath = resPath + ResourceBundle.getBundle("config").getString("publicKeyPath");
         logger.info("publicKeyPath:" + publicKeyPath);
+
         char[] bytes = new char[1024];
         // 获取公钥
         FileReader b1 = new FileReader(publicKeyPath);
@@ -346,7 +348,8 @@ public class UserController {
      * @return
      */
     public String getPrivateKey() throws Exception {
-        File resPath = new File(this.getClass().getResource("/").getPath());
+        //解决字符编码问题
+        File resPath = new File(this.getClass().getResource("/").toURI().getPath());
         privateKeyPath = resPath + ResourceBundle.getBundle("config").getString("privateKeyPath");
         char[] bytes = new char[1024];
         // 获取私钥
